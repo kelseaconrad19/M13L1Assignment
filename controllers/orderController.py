@@ -1,9 +1,7 @@
 from flask import request, jsonify
-from schemas import order_schema, orders_schema
+from schemas import order_schema, orders_schema, customers_schema
 import services.orderServices as orderServices
 from marshmallow import ValidationError
-from application.caching import cache
-
 
 def save():
     try:
@@ -21,3 +19,8 @@ def save():
 def find_all():
     orders = orderServices.find_all()
     return orders_schema.jsonify(orders), 200
+
+def find_all_pagination():
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    return orders_schema.jsonify(orderServices.find_all_pagination(page, per_page)), 200

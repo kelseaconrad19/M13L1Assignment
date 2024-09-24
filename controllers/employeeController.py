@@ -1,10 +1,8 @@
 from flask import request, jsonify
 
-# from application.caching import create_cache
 from schemas import employee_schema, employees_schema
 import services.employeeServices as employeeService
 from marshmallow import ValidationError
-from application.caching import cache
 
 def save():
     try:

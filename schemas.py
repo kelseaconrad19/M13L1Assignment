@@ -47,6 +47,7 @@ class ProductionSchema(ma.Schema):
     quantity = fields.Integer(required=True, validate=validate.Range(min=0))
     product_id = fields.Integer(required=True)
     date_produced = fields.Date(required=True)
+    employee_id = fields.Nested('employeeSchemaID')
 
 production_schema = ProductionSchema()
 productions_schema = ProductionSchema(many=True)

@@ -7,7 +7,8 @@ order_product = db.Table(
     'Order_Product',
     Base.metadata,
     db.Column('order_id', db.ForeignKey('Orders.id')),
-    db.Column('product_id', db.ForeignKey('Products.id'))
+    db.Column('product_id', db.ForeignKey('Products.id')),
+    db.Column('quantity', db.Integer, nullable=False)
 )
 
 class Customer(Base):
@@ -23,14 +24,17 @@ class Employee(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(db.String(255), nullable=False)
     position: Mapped[str] = mapped_column(db.String(320))
+    production_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey('Production.id'), nullable=True)
+    production: Mapped["Production"] = db.relationship("Production", back_populates='employees')
 
 class Order(Base):
     __tablename__ = 'Orders'
     id: Mapped[int] = mapped_column(primary_key=True)
-    date: Mapped[datetime.date] = mapped_column(db.Date, nullable=False)
+    # date: Mapped[datetime.date] = mapped_column(db.Date, nullable=False)
     customer_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey('Customers.id'))
     customer: Mapped["Customer"] = db.relationship(back_populates="orders")
     products: Mapped[List["Product"]] = db.relationship(secondary=order_product)
+    quantity: Mapped[int] = mapped_column(db.Integer, nullable=False)
 
 class Product(Base):
     __tablename__ = 'Products'
@@ -44,3 +48,5 @@ class Production(Base):
     quantity: Mapped[int] = mapped_column(db.Integer, nullable=False)
     product_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey('Products.id'))
     date_produced: Mapped[datetime.date] = mapped_column(db.Date, nullable=False)
+    employees: Mapped[List["Employee"]] = db.relationship("Employee", back_populates="production")
+

@@ -1,6 +1,5 @@
 from flask import request, jsonify
 
-from application.caching import cache
 from schemas import production_schema, productions_schema
 import services.productionServices as productionService
 from marshmallow import ValidationError
@@ -22,3 +21,8 @@ def save():
 def find_all():
     productions = productionService.find_all()
     return productions_schema.jsonify(productions), 200
+
+def production_efficiency():
+    production_date = "2024-09-15"
+    result = productionService.evaluate_production_efficiency(production_date)
+    return jsonify(result)

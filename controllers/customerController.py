@@ -3,7 +3,6 @@ from flask import request, jsonify
 from schemas import customer_schema, customers_schema
 import services.customerServices as customerService
 from marshmallow import ValidationError
-from application.caching import cache
 
 def save():
     #! Post request. /customers POST contain JSON
@@ -23,3 +22,6 @@ def save():
 def find_all():
     customers = customerService.find_all()
     return customers_schema.jsonify(customers), 200
+
+def customer_lifetime_value():
+    return customerService.customer_lifetime_value(), 200
